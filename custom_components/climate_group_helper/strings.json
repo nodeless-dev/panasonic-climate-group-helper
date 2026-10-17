@@ -39,7 +39,8 @@
               "hvac_mode_strategy": "HVAC Mode Strategy",
               "feature_strategy": "Feature Strategy",
               "union_out_of_bounds_action": "Out-of-Bounds Action",
-              "union_unsupported_hvac_action": "Unsupported HVAC Mode Action"
+              "union_unsupported_hvac_action": "Unsupported HVAC Mode Action",
+              "reference_entity": "Reference Climate (Temperature and Humidity)"
             },
             "data_description": {
               "entities": "Add or remove devices. Removing devices stops them from being controlled by the group.",
@@ -47,7 +48,8 @@
               "hvac_mode_strategy": "Strategy for calculating the group's state from its members (e.g. if one is 'heat' and another is 'off').",
               "feature_strategy": "Determines which features (e.g. preset modes, fan modes) are available on the group when members have different capabilities.",
               "union_out_of_bounds_action": "What to do with members that cannot reach the target temperature. Only applies when Feature Strategy is set to Union.",
-              "union_unsupported_hvac_action": "What to do with members that technically do not support the group's target HVAC mode (e.g. AC when heating). Only applies when Feature Strategy is set to Union."
+              "union_unsupported_hvac_action": "What to do with members that technically do not support the group's target HVAC mode (e.g. AC when heating). Only applies when Feature Strategy is set to Union.",
+              "reference_entity": "Use only this group member’s measured temperature and humidity, even when off. Leave empty to keep the usual calculation. Takes priority over external sensors and suspends their calibration. Missing or unavailable readings remain unknown, without switching to another member. Targets and synchronization are configured separately."
             }
           },
           "temperature_section": {
@@ -392,7 +394,8 @@
       "schedule_fallback_payload_invalid": "Invalid YAML format in fallback schedule payload. Must be a valid key-value mapping.",
       "group_presets_invalid": "Invalid YAML format in Group Presets. Must be a valid key-value mapping.",
       "preset_name_collision_notice": "One or more virtual presets share names with native member presets. The virtual definition will override them.",
-      "sensor_loop_protection": "Cannot use a Climate Group Helper entity as an external sensor or calibration target — this would create a feedback loop."
+      "sensor_loop_protection": "Cannot use a Climate Group Helper entity as an external sensor or calibration target — this would create a feedback loop.",
+      "reference_not_in_members": "The reference climate must be a member of the group."
     },
     "abort": {
       "no_changes": "No changes detected."

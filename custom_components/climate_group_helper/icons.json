@@ -20,7 +20,11 @@
               "sleep": "mdi:sleep",
               "standby": "mdi:home-export-outline",
               "summer": "mdi:radiator-off",
-              "vacation": "mdi:beach"
+              "vacation": "mdi:beach",
+              "none": "mdi:air-filter",
+              "heat_8_15": "mdi:weather-sunny",
+              "quiet": "mdi:leaf",
+              "powerful": "mdi:arm-flex"
             }
           },
           "fan_mode": {
@@ -28,12 +32,35 @@
               "circulate": "mdi:fan-clock",
               "power": "mdi:fan-chevron-up",
               "slow": "mdi:fan-chevron-down",
-              "turbo": "mdi:wind-power"
+              "turbo": "mdi:wind-power",
+              "Auto": "mdi:alpha-a-circle-outline",
+              "Low": "mdi:numeric-1-circle-outline",
+              "LowMid": "mdi:numeric-2-circle-outline",
+              "Mid": "mdi:numeric-3-circle-outline",
+              "HighMid": "mdi:numeric-4-circle-outline",
+              "High": "mdi:numeric-5-circle-outline"
             }
           },
           "swing_mode": {
             "state": {
-              "auto": "mdi:arrow-oscillating"
+              "auto": "mdi:arrow-oscillating",
+              "Auto": "mdi:shuffle",
+              "Up": "mdi:arrow-up-thin",
+              "UpMid": "mdi:arrow-top-right-thin",
+              "Mid": "mdi:arrow-right-thin",
+              "DownMid": "mdi:arrow-bottom-right-thin",
+              "Down": "mdi:arrow-down-thin",
+              "Swing": "mdi:shuffle"
+            }
+          },
+          "swing_horizontal_mode": {
+            "state": {
+              "Auto": "mdi:compare-horizontal",
+              "Left": "mdi:arrow-left-thin",
+              "LeftMid": "mdi:arrow-bottom-left-thin",
+              "Mid": "mdi:arrow-down-thin",
+              "RightMid": "mdi:arrow-bottom-right-thin",
+              "Right": "mdi:arrow-right-thin"
             }
           }
         }

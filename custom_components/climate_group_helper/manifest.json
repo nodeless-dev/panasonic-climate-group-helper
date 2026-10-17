@@ -1,15 +1,20 @@
 {
   "domain": "climate_group_helper",
   "name": "Climate Group Helper",
-  "after_dependencies": ["frontend", "http"],
-  "codeowners": ["@bjrnptrsn"],
+  "after_dependencies": [
+    "frontend",
+    "http"
+  ],
+  "codeowners": [
+    "@nodeless-dev"
+  ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/bjrnptrsn/climate_group_helper",
+  "documentation": "https://github.com/nodeless-dev/climate_group_helper",
   "integration_type": "helper",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/bjrnptrsn/climate_group_helper/issues",
+  "issue_tracker": "https://github.com/nodeless-dev/climate_group_helper/issues",
   "quality_scale": "internal",
   "requirements": [],
-  "version": "1.15.0"
+  "version": "1.15.1"
 }

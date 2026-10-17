@@ -112,13 +112,13 @@ class CalibrationHandler:
 
     @property
     def bypassed(self) -> bool:
-        """Return True while a slot suspends calibration writes.
+        """Return True when calibration is suspended by a reference or slot.
 
         Read at call time rather than captured in __init__, so a slot can
         suspend and resume writes without reloading the handler — the same
         pattern the other meta-keys use for their handler modes.
         """
-        return (
+        return bool(self._group.reference_entity_id) or (
             self._group.run_state.config_overrides.get(META_KEY_CALIBRATION_MODE)
             == META_VALUE_DISABLED
         )

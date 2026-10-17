@@ -41,6 +41,7 @@ CONF_ADVANCED_MODE = "advanced_mode"
 CONF_FEATURE_STRATEGY = "feature_strategy"
 CONF_HVAC_MODE_STRATEGY = "hvac_mode_strategy"
 CONF_MASTER_ENTITY = "master_entity"
+CONF_REFERENCE_ENTITY = "reference_entity"
 CONF_UNION_OUT_OF_BOUNDS_ACTION = "union_out_of_bounds_action"
 CONF_UNION_UNSUPPORTED_HVAC_ACTION = "union_unsupported_hvac_action"
 
@@ -418,6 +419,7 @@ MEMBER_LIST_KEYS: frozenset[str] = frozenset({
 })
 
 ENTITY_SELECTOR_KEYS: frozenset[str] = frozenset({
+    CONF_REFERENCE_ENTITY,
     CONF_TEMP_SENSORS,
     CONF_HUMIDITY_SENSORS,
     CONF_ROOM_SENSOR,

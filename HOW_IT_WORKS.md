@@ -16,7 +16,7 @@ The [README](README.md) explains each feature on its own. This page shows how th
 ## The core idea: target and reality
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/how_it_works_overview.svg" alt="The group's target feeds the devices through the temporary rules; the devices feed the group display; changes on a device go back to the target through the Sync Mode" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_overview.svg" alt="The group's target feeds the devices through the temporary rules; the devices feed the group display; changes on a device go back to the target through the Sync Mode" width="700"/>
 </p>
 
 Everything in Climate Group Helper is built around one thing: the **group's target**. It is what the group wants your devices to do: mode, temperature, preset and so on.
@@ -45,7 +45,7 @@ You can always look up the target itself: it is the `target_state` attribute in 
 ## What takes priority for a while
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/how_it_works_priority.svg" alt="Priority from top to bottom: Main Switch off, window open, nobody home, boost, group target. Isolated devices stand aside." width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_priority.svg" alt="Priority from top to bottom: Main Switch off, window open, nobody home, boost, group target. Isolated devices stand aside." width="700"/>
 </p>
 
 From top to bottom, the first one that applies decides what the devices get:
@@ -72,7 +72,7 @@ The first three are **blocks**. A few things are worth knowing about them:
 ## How the target reaches the devices
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/how_it_works_command_path.svg" alt="The group target of 21 °C is raised by a group offset of +2 and lowered by a bedroom member offset of −1, checked against the device's limits, and the bedroom thermostat receives 22 °C" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_command_path.svg" alt="The group target of 21 °C is raised by a group offset of +2 and lowered by a bedroom member offset of −1, checked against the device's limits, and the bedroom thermostat receives 22 °C" width="700"/>
 </p>
 
 The target is the same for the whole group. On the way to each device, it is adjusted for that device:
@@ -121,7 +121,7 @@ Some cases don't follow the Sync Mode:
 
 The group entity shows **what the devices do**, not what the group wants:
 
-- **Current temperature and humidity** come from your external sensors, or are calculated from the devices (mean, median, minimum or maximum).
+- **Current temperature and humidity** come only from the selected **Reference Climate**, when configured. Otherwise they come from external sensors, or are calculated from the devices (mean, median, minimum or maximum). Missing reference measurements remain unknown. Selecting a reference suspends external-sensor calibration; group sensors and automations also see the reference measurements.
 - **Target temperature** is calculated the same way from the devices' setpoints, or taken from the master device with **Use Master Target Temperature** (or **Use Master Target Humidity**). With **Correct member offset** (on by default), Member Offsets are taken out first, so a bedroom running a degree cooler doesn't pull the value down.
 - **Mode** is combined from the devices' modes as set by the **HVAC Mode Strategy**.
 

@@ -1,17 +1,21 @@
-# [Climate Group Helper](https://github.com/bjrnptrsn/climate_group_helper) for Home Assistant
+# Climate Group Helper: Panasonic Comfort Cloud Fork
 
 <p align="center">
-  <a href="https://github.com/bjrnptrsn/climate_group_helper"><img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/icon@2x.png" alt="Climate Group Helper for Home Assistant logo" width="160"/></a>
+  <a href="https://github.com/nodeless-dev/climate_group_helper"><img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/icon@2x.png" alt="Climate Group Helper for Home Assistant logo" width="160"/></a>
 </p>
 
-<p align="center">
-  <a href="https://github.com/hacs/integration"><img src="https://img.shields.io/badge/HACS-Default-orange.svg" alt="HACS - Home Assistant Community Store"/></a>
-  <a href="https://github.com/bjrnptrsn/climate_group_helper/releases"><img src="https://img.shields.io/github/v/release/bjrnptrsn/climate_group_helper" alt="Release"/></a>
-</p>
+Maintained by [nodeless-dev](https://github.com/nodeless-dev) for two Panasonic
+Comfort Cloud air conditioners in the same room. This fork keeps the general
+climate grouping features and adds:
 
-<p align="center">
-  🇬🇧 English · <a href="LIESMICH.md">🇩🇪 Deutsch</a>
-</p>
+- Panasonic preset, fan, and swing icons in the standard Home Assistant climate dialog.
+- A selectable reference climate for the group's measured temperature and humidity,
+  independent of the unit that leads synchronization or supplies target values.
+
+Based on [Climate Group Helper by Björn Petersen](https://github.com/bjrnptrsn/climate_group_helper),
+under the [MIT license](LICENSE). Repository documentation is in English; Home
+Assistant translations are retained. Existing screenshots illustrate the original
+features and may not show the reference-climate option.
 
 <p align="center">
   <strong>The advanced logic layer for your Home Assistant climate devices.</strong><br>
@@ -34,7 +38,7 @@
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/configuration_simple.png" alt="Climate Group Helper Simple Configuration Options Overview" height="350"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/configuration_simple.png" alt="Climate Group Helper Simple Configuration Options Overview" height="350"/>
 </p>
 
 ---
@@ -54,21 +58,23 @@ Managing climate in Home Assistant can be messy: TRVs measure the wrong temperat
 
 | Step | Action |
 | :--- | :--- |
-| **1. Install** | Add via **HACS** and restart Home Assistant. |
+| **1. Install** | Add this fork as a **HACS custom repository** ([instructions](#installation)) and restart Home Assistant. |
 | **2. Add** | Go to *Settings → Devices & Services → Helpers → Create Helper*. |
 | **3. Setup** | Give your group a name and select your thermostats (TRVs, ACs, heaters — mix freely). |
 | **4. Done!** | You now have a single entity controlling everything. <br> *Tip: Enable **Advanced Mode** in the options to unlock all features.* |
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/helper_selection.png" alt="Select Climate Group Helper in Home Assistant" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/helper_selection.png" alt="Select Climate Group Helper in Home Assistant" width="400"/>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/setup_flow.png" alt="Configure Climate Group Helper" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/setup_flow.png" alt="Configure Climate Group Helper" width="400"/>
 </p>
 
 ---
 
 ## Table of Contents
+
+- [Panasonic Room Setup](#panasonic-room-setup)
 
 - [Core Concept](#core-concept-the-unified-foundation)
   - [Simple Mode](#simple-mode-core-capabilities)
@@ -99,6 +105,21 @@ Managing climate in Home Assistant can be messy: TRVs measure the wrong temperat
 - [Setup](#setup)
 - [Troubleshooting](#troubleshooting)
 
+## Panasonic Room Setup
+
+1. Set up both air conditioners with [Panasonic Comfort Cloud](https://github.com/sockless-coding/panasonic_cc).
+2. Create a Climate Group Helper containing both `climate.*` entities.
+3. Open the helper's options. In **Members & Modes**, set **Reference Climate
+   (Temperature and Humidity)** to the unit with the most representative reading.
+   For a room with one unit obstructed by furniture, compare readings with a room
+   thermometer before choosing the unobstructed unit.
+4. Save. The group reports that unit's current measurements and still sends
+   commands to both members. Clear the reference field to restore aggregation.
+
+This option is available without Advanced Mode. If the reference does not report
+humidity, the group cannot report its current humidity. Unavailable measurements
+stay unknown; another member is never substituted silently.
+
 ## Core Concept: The Unified Foundation
 
 The Climate Group Helper provides a robust "Single Source of Truth" for your climate devices. It creates a unified management layer that ensures your devices work together as one cohesive system while maintaining accurate room states.
@@ -125,7 +146,7 @@ Unlock the full potential of your climate system. These specialized features are
 > **New groups start in Simple Mode.** Existing groups upgraded from earlier versions keep **Advanced Features** active automatically so nothing breaks.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/configuration_advanced.png" alt="Climate Group Helper Advanced Configuration Options Overview" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/configuration_advanced.png" alt="Climate Group Helper Advanced Configuration Options Overview" width="400"/>
 </p>
 
 ### Master Entity
@@ -408,7 +429,7 @@ A dedicated `number` entity allows you to apply a global temperature shift (±5.
 ## Dashboard Card
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/bjrnptrsn/climate_group_helper/main/assets/card_demo.png" alt="Climate Group Helper card next to its editor" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/card_demo.png" alt="Climate Group Helper card next to its editor" width="700"/>
 </p>
 
 The integration ships its own dashboard card. Add it like any other card — it
@@ -478,10 +499,26 @@ When everything agrees, it is empty. Two details make it trustworthy:
 | Option | Description |
 |--------|-------------|
 | **Master Entity** | Designate one member as the group's Leader. Enables Master/Lock sync mode, Master-aware window tracking, and centralized temperature/humidity target display. |
+| **Reference Climate (Temperature and Humidity)** | Optional member whose current temperature and humidity the group reports. Available in both Simple and Advanced Mode. Leave empty to keep the existing aggregation. |
 | **HVAC Mode Strategy** | How the group reports its combined mode. See table below. |
 | **Feature Strategy** | Which features the group exposes. See table below. |
 | **Out-of-Bounds Action** | *(Union only)* What to do when a target temperature is outside a member's range. |
 | **Unsupported HVAC Mode Action** | *(Union only)* What to do with members that don't support the requested mode. |
+
+The reference climate is independent of the Master Entity: it supplies measured
+values, while targets, capabilities, and synchronization keep their existing
+settings. Both units continue receiving group commands. The reference is read even
+when off or isolated. A missing reading, or an unavailable reference, reports an
+unknown value rather than silently using another member. If the reference has no
+humidity measurement, the group's current humidity is unknown.
+
+When selected, the reference takes precedence over external temperature/humidity
+sensors and suspends their calibration writes. Group sensors and automations
+reading the group's current measurements also use these reference values.
+
+Panasonic Comfort Cloud preset, fan, vertical swing, and horizontal swing values
+use the same icons as the individual Panasonic climate entities in the standard
+Home Assistant climate dialog. Existing icons for other devices are preserved.
 
 ### HVAC Mode Strategy
 
@@ -861,15 +898,23 @@ data:
 
 ## Installation
 
-### Via HACS (Recommended)
-1. Open **HACS**.
-2. Search for **Climate Group Helper**.
-3. Click **Download**
+### Via HACS Custom Repository
+
+1. Open **HACS** and its **Custom repositories** menu.
+2. Add `https://github.com/nodeless-dev/climate_group_helper` with type **Integration**.
+3. Download the latest published release (`v1.15.1` or newer).
 4. **Restart Home Assistant**.
 
+The fork uses the same integration domain (`climate_group_helper`) as upstream,
+so install one version at a time. If you already use upstream, back up your
+configuration and change the repository used by HACS before downloading the fork.
+Existing helpers keep the same integration identity.
+
 ### Manual
-1. Download the [latest release](https://github.com/bjrnptrsn/climate_group_helper/releases).
-2. Copy `custom_components/climate_group_helper` to your `custom_components` folder.
+
+1. Download the source ZIP from the [latest release](https://github.com/nodeless-dev/climate_group_helper/releases/latest).
+2. Copy `custom_components/climate_group_helper` into your Home Assistant
+   `custom_components` folder, replacing the existing integration files if installed.
 3. **Restart Home Assistant**.
 
 ## Setup
@@ -914,8 +959,22 @@ grep 'climate_group_helper' home-assistant.log > cgh.log
 
 ## Contributing
 
-Found a bug or have an idea? [Open an issue](https://github.com/bjrnptrsn/climate_group_helper/issues) on GitHub.
+Found a bug or have an idea? [Open an issue](https://github.com/nodeless-dev/climate_group_helper/issues) on GitHub.
 
 ## License
 
 MIT License
+
+## Development
+
+Use Python 3.14 or newer:
+
+```sh
+python -m venv .venv
+.venv/bin/python -m pip install -r tests/requirements.txt
+.venv/bin/python -m pytest -q
+```
+
+The tests cover reference selection and clearing, unavailable or invalid readings,
+external-sensor precedence, calibration suspension, and unchanged group targets.
+HACS and Hassfest validation run separately in GitHub Actions.

@@ -70,6 +70,7 @@ from .const import (
     CONF_RANGE_TEMPLATE_HUMIDITY_DEACTIVATION_DELAY,
     CONF_RANGE_TEMPLATE_HUMIDITY_ENABLED,
     CONF_RANGE_TEMPLATE_HUMIDITY_HYSTERESIS,
+    CONF_REFERENCE_ENTITY,
     CONF_RETRY_ATTEMPTS,
     CONF_RETRY_DELAY,
     CONF_TEMP_CURRENT_AVG,
@@ -199,6 +200,7 @@ class ClimateGroupHelper(GroupEntity, ClimateEntity, RestoreEntity):
         self.entry: ConfigEntry | None = None
         self.config = config
         self.climate_entity_ids = entity_ids
+        self.reference_entity_id: str | None = config.get(CONF_REFERENCE_ENTITY)
         self.event: Event | None = None
         self._attr_name = name
         self._attr_unique_id = unique_id

@@ -92,6 +92,7 @@ from .const import (
     CONF_RANGE_TEMPLATE_HUMIDITY_DEACTIVATION_DELAY,
     CONF_RANGE_TEMPLATE_HUMIDITY_ENABLED,
     CONF_RANGE_TEMPLATE_HUMIDITY_HYSTERESIS,
+    CONF_REFERENCE_ENTITY,
     CONF_RETAIN_SERVICE_CHANGES_PRESETS,
     CONF_RETAIN_SERVICE_CHANGES_SCHEDULE,
     CONF_RETRY_ATTEMPTS,
@@ -321,6 +322,8 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
         """Normalize and clean up options based on dependencies."""
         # Start with current config and overlay flat inputs
         current_config = {**self._config_entry.options, **user_input}
+        if CONF_ENTITIES in user_input and not user_input.get(CONF_REFERENCE_ENTITY):
+            current_config.pop(CONF_REFERENCE_ENTITY, None)
         # refresh=True means advanced sections weren't rendered — skip deletion guards.
         advanced_mode = bool(user_input.get(CONF_ADVANCED_MODE)) and not refresh
         # Section rendered? Its own required field is in user_input exactly then.
@@ -622,6 +625,12 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                             )
                         ),
                         **master_fields,
+                        vol.Optional(
+                            CONF_REFERENCE_ENTITY,
+                            description={"suggested_value": config.get(CONF_REFERENCE_ENTITY)},
+                        ): selector.EntitySelector(
+                            selector.EntitySelectorConfig(domain=CLIMATE_DOMAIN)
+                        ),
                         vol.Required(
                             CONF_HVAC_MODE_STRATEGY,
                             default=config.get(
@@ -1904,6 +1913,13 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                 return await self._show_main_form(
                     current_config,
                     form_errors={"members_section": "no_entities"},
+                )
+
+            reference_entity = render_config.get(CONF_REFERENCE_ENTITY)
+            if reference_entity and reference_entity not in submitted_entities:
+                return await self._show_main_form(
+                    render_config,
+                    form_errors={"members_section": "reference_not_in_members"},
                 )
 
             # Validate: master entity must be a member of the group

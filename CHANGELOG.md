@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.15.1 - 2026-10-17 (nodeless-dev fork)
+
+- Add Panasonic Comfort Cloud icons for preset, fan, and swing controls.
+- Add an optional reference member for current temperature and humidity in both
+  Simple and Advanced Mode, without changing group targets or command dispatch.
+- Report unknown measurements when the reference is missing or unavailable.
+- Suspend external-sensor calibration while reference measurements are selected.
+- Adapt repository documentation, ownership, and installation links to this fork.
+  Remove duplicate German documentation and diagrams; retain all HA translations.
+- Add regression tests against Home Assistant 2026.10.2.
+
+Earlier entries below describe the upstream project history.
+
 ## 1.15.0 - 2026-10-16
 
 ### ✨ Improvements

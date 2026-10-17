@@ -39,7 +39,8 @@
               "hvac_mode_strategy": "Stratégie du Mode HVAC",
               "feature_strategy": "Stratégie des fonctionnalités",
               "union_out_of_bounds_action": "Action hors plage",
-              "union_unsupported_hvac_action": "Action pour mode HVAC non pris en charge"
+              "union_unsupported_hvac_action": "Action pour mode HVAC non pris en charge",
+              "reference_entity": "Clim de référence (température et humidité)"
             },
             "data_description": {
               "entities": "Ajouter ou supprimer des appareils. La suppression des appareils arrête leur contrôle par le groupe.",
@@ -47,7 +48,8 @@
               "hvac_mode_strategy": "Stratégie pour calculer l'état du groupe à partir de ses membres (ex. si l'un 'heat' et un autre est 'off').",
               "feature_strategy": "Détermine quelles fonctionnalités (ex. modes prédéfinis, modes ventilateur) sont disponibles sur le groupe lorsque les membres ont des capacités différentes.",
               "union_out_of_bounds_action": "Que faire des appareils qui ne peuvent pas atteindre la température cible. S'applique uniquement si la stratégie de fonctionnalités est définie sur Union.",
-              "union_unsupported_hvac_action": "Que faire avec les membres qui ne prennent pas en charge le mode HVAC cible du groupe (ex. climatisation lors du chauffage). S'applique uniquement si la stratégie de fonctionnalités est Union."
+              "union_unsupported_hvac_action": "Que faire avec les membres qui ne prennent pas en charge le mode HVAC cible du groupe (ex. climatisation lors du chauffage). S'applique uniquement si la stratégie de fonctionnalités est Union.",
+              "reference_entity": "Utiliser uniquement la température et l’humidité mesurées par ce membre du groupe, même éteint. Laisser vide pour conserver le calcul habituel. Ce choix est prioritaire sur les capteurs externes et suspend leur calibration. Une mesure absente ou indisponible reste inconnue, sans utiliser une autre clim. Les consignes et la synchronisation restent configurées séparément."
             }
           },
           "temperature_section": {
@@ -392,7 +394,8 @@
       "schedule_fallback_payload_invalid": "Format YAML invalide dans les données de secours du planning. Doit être un mappage clé-valeur valide.",
       "group_presets_invalid": "Format YAML non valide dans les préréglages de groupe. Doit être un mappage clé-valeur valide.",
       "preset_name_collision_notice": "Un ou plusieurs préréglages de groupe partagent le même nom que les préréglages natifs des membres. La définition du groupe les remplacera.",
-      "sensor_loop_protection": "Impossible d'utiliser une entité Climate Group Helper comme capteur externe ou cible de calibration — cela créerait une boucle de rétroaction."
+      "sensor_loop_protection": "Impossible d'utiliser une entité Climate Group Helper comme capteur externe ou cible de calibration — cela créerait une boucle de rétroaction.",
+      "reference_not_in_members": "La clim de référence doit être un membre du groupe."
     },
     "abort": {
       "no_changes": "Aucun changement détecté."
