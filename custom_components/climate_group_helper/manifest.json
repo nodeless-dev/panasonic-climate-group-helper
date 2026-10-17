@@ -10,11 +10,11 @@
   ],
   "config_flow": true,
   "dependencies": [],
-  "documentation": "https://github.com/nodeless-dev/climate_group_helper",
+  "documentation": "https://github.com/nodeless-dev/panasonic-climate-group-helper",
   "integration_type": "helper",
   "iot_class": "calculated",
-  "issue_tracker": "https://github.com/nodeless-dev/climate_group_helper/issues",
+  "issue_tracker": "https://github.com/nodeless-dev/panasonic-climate-group-helper/issues",
   "quality_scale": "internal",
   "requirements": [],
-  "version": "1.15.1"
+  "version": "1.0.0"
 }

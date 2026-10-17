@@ -16,7 +16,7 @@ The [README](README.md) explains each feature on its own. This page shows how th
 ## The core idea: target and reality
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_overview.svg" alt="The group's target feeds the devices through the temporary rules; the devices feed the group display; changes on a device go back to the target through the Sync Mode" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/how_it_works_overview.svg" alt="The group's target feeds the devices through the temporary rules; the devices feed the group display; changes on a device go back to the target through the Sync Mode" width="700"/>
 </p>
 
 Everything in Climate Group Helper is built around one thing: the **group's target**. It is what the group wants your devices to do: mode, temperature, preset and so on.
@@ -45,7 +45,7 @@ You can always look up the target itself: it is the `target_state` attribute in 
 ## What takes priority for a while
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_priority.svg" alt="Priority from top to bottom: Main Switch off, window open, nobody home, boost, group target. Isolated devices stand aside." width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/how_it_works_priority.svg" alt="Priority from top to bottom: Main Switch off, window open, nobody home, boost, group target. Isolated devices stand aside." width="700"/>
 </p>
 
 From top to bottom, the first one that applies decides what the devices get:
@@ -72,7 +72,7 @@ The first three are **blocks**. A few things are worth knowing about them:
 ## How the target reaches the devices
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/how_it_works_command_path.svg" alt="The group target of 21 °C is raised by a group offset of +2 and lowered by a bedroom member offset of −1, checked against the device's limits, and the bedroom thermostat receives 22 °C" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/how_it_works_command_path.svg" alt="The group target of 21 °C is raised by a group offset of +2 and lowered by a bedroom member offset of −1, checked against the device's limits, and the bedroom thermostat receives 22 °C" width="700"/>
 </p>
 
 The target is the same for the whole group. On the way to each device, it is adjusted for that device:

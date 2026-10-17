@@ -1,7 +1,7 @@
-# Climate Group Helper: Panasonic Comfort Cloud Fork
+# Panasonic Climate Group Helper
 
 <p align="center">
-  <a href="https://github.com/nodeless-dev/climate_group_helper"><img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/icon@2x.png" alt="Climate Group Helper for Home Assistant logo" width="160"/></a>
+  <a href="https://github.com/nodeless-dev/panasonic-climate-group-helper"><img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/icon@2x.png" alt="Climate Group Helper for Home Assistant logo" width="160"/></a>
 </p>
 
 Maintained by [nodeless-dev](https://github.com/nodeless-dev) for two Panasonic
@@ -13,7 +13,8 @@ climate grouping features and adds:
   independent of the unit that leads synchronization or supplies target values.
 
 Based on [Climate Group Helper by Björn Petersen](https://github.com/bjrnptrsn/climate_group_helper),
-under the [MIT license](LICENSE). Repository documentation is in English; Home
+under the [MIT license](LICENSE). See [fork releases](CHANGELOG.md) and the preserved
+[upstream changelog](UPSTREAM_CHANGELOG.md). Repository documentation is in English; Home
 Assistant translations are retained. Existing screenshots illustrate the original
 features and may not show the reference-climate option.
 
@@ -38,7 +39,7 @@ features and may not show the reference-climate option.
 </p>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/configuration_simple.png" alt="Climate Group Helper Simple Configuration Options Overview" height="350"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/configuration_simple.png" alt="Climate Group Helper Simple Configuration Options Overview" height="350"/>
 </p>
 
 ---
@@ -64,10 +65,10 @@ Managing climate in Home Assistant can be messy: TRVs measure the wrong temperat
 | **4. Done!** | You now have a single entity controlling everything. <br> *Tip: Enable **Advanced Mode** in the options to unlock all features.* |
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/helper_selection.png" alt="Select Climate Group Helper in Home Assistant" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/helper_selection.png" alt="Select Climate Group Helper in Home Assistant" width="400"/>
 </p>
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/setup_flow.png" alt="Configure Climate Group Helper" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/setup_flow.png" alt="Configure Climate Group Helper" width="400"/>
 </p>
 
 ---
@@ -146,7 +147,7 @@ Unlock the full potential of your climate system. These specialized features are
 > **New groups start in Simple Mode.** Existing groups upgraded from earlier versions keep **Advanced Features** active automatically so nothing breaks.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/configuration_advanced.png" alt="Climate Group Helper Advanced Configuration Options Overview" width="400"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/configuration_advanced.png" alt="Climate Group Helper Advanced Configuration Options Overview" width="400"/>
 </p>
 
 ### Master Entity
@@ -429,7 +430,7 @@ A dedicated `number` entity allows you to apply a global temperature shift (±5.
 ## Dashboard Card
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/nodeless-dev/climate_group_helper/main/assets/card_demo.png" alt="Climate Group Helper card next to its editor" width="700"/>
+  <img src="https://raw.githubusercontent.com/nodeless-dev/panasonic-climate-group-helper/main/assets/card_demo.png" alt="Climate Group Helper card next to its editor" width="700"/>
 </p>
 
 The integration ships its own dashboard card. Add it like any other card — it
@@ -901,18 +902,20 @@ data:
 ### Via HACS Custom Repository
 
 1. Open **HACS** and its **Custom repositories** menu.
-2. Add `https://github.com/nodeless-dev/climate_group_helper` with type **Integration**.
-3. Download the latest published release (`v1.15.1` or newer).
+2. Add `https://github.com/nodeless-dev/panasonic-climate-group-helper` with type **Integration**.
+3. Download the latest published release (`v1.0.0` or newer).
 4. **Restart Home Assistant**.
 
 The fork uses the same integration domain (`climate_group_helper`) as upstream,
 so install one version at a time. If you already use upstream, back up your
 configuration and change the repository used by HACS before downloading the fork.
-Existing helpers keep the same integration identity.
+Existing helpers keep the same integration identity. The name inside Home Assistant
+remains Climate Group Helper; HACS lists this fork as Panasonic Climate Group Helper.
+Fork releases start at `v1.0.0` and are versioned independently from upstream.
 
 ### Manual
 
-1. Download the source ZIP from the [latest release](https://github.com/nodeless-dev/climate_group_helper/releases/latest).
+1. Download the source ZIP from the [latest release](https://github.com/nodeless-dev/panasonic-climate-group-helper/releases/latest).
 2. Copy `custom_components/climate_group_helper` into your Home Assistant
    `custom_components` folder, replacing the existing integration files if installed.
 3. **Restart Home Assistant**.
@@ -959,7 +962,7 @@ grep 'climate_group_helper' home-assistant.log > cgh.log
 
 ## Contributing
 
-Found a bug or have an idea? [Open an issue](https://github.com/nodeless-dev/climate_group_helper/issues) on GitHub.
+Found a bug or have an idea? [Open an issue](https://github.com/nodeless-dev/panasonic-climate-group-helper/issues) on GitHub.
 
 ## License
 
