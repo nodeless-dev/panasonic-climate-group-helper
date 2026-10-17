@@ -611,17 +611,17 @@
               "none": "Aucun",
               "powerful": "Puissant",
               "quiet": "Silencieux",
-              "heat_8_15": "Chauffage 8–15 °C"
+              "heat_8_15": "+8/15°C"
             }
           },
           "fan_mode": {
             "state": {
               "auto": "Auto",
               "low": "Faible",
-              "lowmid": "Moyenne-faible",
-              "mid": "Moyenne",
-              "highmid": "Moyenne-forte",
-              "high": "Forte"
+              "lowmid": "Moyen-faible",
+              "mid": "Moyen",
+              "highmid": "Moyen-élevé",
+              "high": "Élevé"
             }
           },
           "swing_mode": {
@@ -632,16 +632,16 @@
               "mid": "Milieu",
               "downmid": "Milieu-bas",
               "down": "Bas",
-              "swing": "Oscillation"
+              "swing": "Balancement"
             }
           },
           "swing_horizontal_mode": {
             "state": {
               "auto": "Auto",
               "left": "Gauche",
-              "leftmid": "Centre-gauche",
+              "leftmid": "Centre gauche",
               "mid": "Centre",
-              "rightmid": "Centre-droit",
+              "rightmid": "Centre droit",
               "right": "Droite"
             }
           }
