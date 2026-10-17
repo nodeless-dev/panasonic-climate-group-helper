@@ -91,6 +91,7 @@ from .const import (
     FLOAT_TOLERANCE,
     SUPPORTED_FEATURES,
     TEMP_TARGET_ATTRS,
+    CurrentAverageOption,
     FeatureStrategy,
     HvacModeStrategy,
     RoundOption,
@@ -240,9 +241,8 @@ class Aggregator:
         all_ready = len(valid_states) == len(expected_entity_ids) if expected_entity_ids else True
         return valid_states, all_ready
 
-    def _get_reference_value(self, attribute: str) -> float | None:
+    def _get_reference_value(self, entity_id: str | None, attribute: str) -> float | None:
         """Read only the selected member, including when it is off or isolated."""
-        entity_id = self._group.reference_entity_id
         if not entity_id or entity_id not in self._group.climate_entity_ids:
             return None
         state = self.read_member_state(entity_id)
@@ -478,8 +478,8 @@ class Aggregator:
             temp_states, ATTR_CURRENT_TEMPERATURE, reduce=lambda *data: self._group._temp_current_avg_calc(data)
         )
         needs_calibration = False
-        if self._group.reference_entity_id:
-            current_temperature = self._get_reference_value(ATTR_CURRENT_TEMPERATURE)
+        if self._group._temp_current_avg_mode == CurrentAverageOption.REFERENCE:
+            current_temperature = self._get_reference_value(self._group.temp_reference_entity_id, ATTR_CURRENT_TEMPERATURE)
         elif self._group.temp_sensor_entity_ids:  # always empty in simple mode
             current_temperature = self._get_avg_sensor_value(
                 self._group.temp_sensor_entity_ids, self._group._temp_current_avg_calc
@@ -549,8 +549,8 @@ class Aggregator:
         Pure — see `_compute_temperature` for why calibration runs after the apply.
         """
         needs_calibration = False
-        if self._group.reference_entity_id:
-            current_humidity = self._get_reference_value(ATTR_CURRENT_HUMIDITY)
+        if self._group._humidity_current_avg_mode == CurrentAverageOption.REFERENCE:
+            current_humidity = self._get_reference_value(self._group.humidity_reference_entity_id, ATTR_CURRENT_HUMIDITY)
         elif self._group.humidity_sensor_entity_ids:  # always empty in simple mode
             current_humidity = self._get_avg_sensor_value(
                 self._group.humidity_sensor_entity_ids, self._group._humidity_current_avg_calc

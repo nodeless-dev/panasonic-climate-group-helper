@@ -68,6 +68,7 @@ CONF_CALIBRATION_HEARTBEAT = "calibration_heartbeat"
 CONF_CALIBRATION_IGNORE_OFF = "calibration_ignore_off"
 CONF_TEMP_CALIBRATION_MODE = "temp_calibration_mode"
 CONF_TEMP_CURRENT_AVG = "temp_current_avg"
+CONF_TEMP_REFERENCE_ENTITY = "temp_reference_entity"
 CONF_TEMP_INVERTED_OFFSET_TARGETS = "temp_inverted_offset_targets"
 CONF_TEMP_SENSORS = "temp_sensors"
 CONF_TEMP_TARGET_AVG = "temp_target_avg"
@@ -77,6 +78,7 @@ CONF_TEMP_USE_MASTER = "temp_use_master"
 
 # Humidity Settings
 CONF_HUMIDITY_CURRENT_AVG = "humidity_current_avg"
+CONF_HUMIDITY_REFERENCE_ENTITY = "humidity_reference_entity"
 CONF_HUMIDITY_SENSORS = "humidity_sensors"
 CONF_HUMIDITY_TARGET_AVG = "humidity_target_avg"
 CONF_HUMIDITY_TARGET_ROUND = "humidity_target_round"
@@ -226,6 +228,16 @@ class AverageOption(StrEnum):
     MEDIAN = "median"
     MIN = "min"
     MAX = "max"
+
+
+class CurrentAverageOption(StrEnum):
+    """Sources for measured temperature and humidity, independent of targets."""
+
+    MEAN = "mean"
+    MEDIAN = "median"
+    MIN = "min"
+    MAX = "max"
+    REFERENCE = "reference"
 
 
 class RoundOption(StrEnum):
@@ -419,7 +431,8 @@ MEMBER_LIST_KEYS: frozenset[str] = frozenset({
 })
 
 ENTITY_SELECTOR_KEYS: frozenset[str] = frozenset({
-    CONF_REFERENCE_ENTITY,
+    CONF_TEMP_REFERENCE_ENTITY,
+    CONF_HUMIDITY_REFERENCE_ENTITY,
     CONF_TEMP_SENSORS,
     CONF_HUMIDITY_SENSORS,
     CONF_ROOM_SENSOR,

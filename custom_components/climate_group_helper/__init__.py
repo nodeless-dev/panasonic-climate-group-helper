@@ -27,6 +27,7 @@ from .const import (
     CONF_GRACE_PERIOD,
     CONF_GROUP_PRESETS,
     CONF_HUMIDITY_CURRENT_AVG,
+    CONF_HUMIDITY_REFERENCE_ENTITY,
     CONF_HUMIDITY_SENSORS,
     CONF_HUMIDITY_TARGET_AVG,
     CONF_HUMIDITY_TARGET_ROUND,
@@ -85,6 +86,7 @@ from .const import (
     CONF_TEMP_CALIBRATION_MODE,
     CONF_TEMP_CURRENT_AVG,
     CONF_TEMP_INVERTED_OFFSET_TARGETS,
+    CONF_TEMP_REFERENCE_ENTITY,
     CONF_TEMP_SENSORS,
     CONF_TEMP_TARGET_AVG,
     CONF_TEMP_TARGET_ROUND,
@@ -101,6 +103,7 @@ from .const import (
     DOMAIN,
     IsolationTrigger,
 )
+from .reference import migrate_reference_options
 
 # Valid configuration keys for migration whitelist
 VALID_CONFIG_KEYS = {
@@ -114,6 +117,8 @@ VALID_CONFIG_KEYS = {
     CONF_UNION_UNSUPPORTED_HVAC_ACTION,
     # Master entity
     CONF_MASTER_ENTITY,
+    CONF_TEMP_REFERENCE_ENTITY,
+    CONF_HUMIDITY_REFERENCE_ENTITY,
     CONF_REFERENCE_ENTITY,
     # Temperature options
     CONF_TEMP_CURRENT_AVG,
@@ -461,6 +466,11 @@ async def async_migrate_entry(hass: HomeAssistant, entry: ConfigEntry) -> bool:
 
         hass.config_entries.async_update_entry(entry, data={}, options=new_options, version=16)
         _LOGGER.info("[%s] Migration to v16 complete.", entry.title)
+
+    if entry.version < 17:
+        hass.config_entries.async_update_entry(
+            entry, options=migrate_reference_options(dict(entry.options)), version=17
+        )
 
     return True
 

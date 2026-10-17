@@ -110,12 +110,14 @@ Managing climate in Home Assistant can be messy: TRVs measure the wrong temperat
 
 1. Set up both air conditioners with [Panasonic Comfort Cloud](https://github.com/sockless-coding/panasonic_cc).
 2. Create a Climate Group Helper containing both `climate.*` entities.
-3. Open the helper's options. In **Members & Modes**, set **Reference Climate
-   (Temperature and Humidity)** to the unit with the most representative reading.
-   For a room with one unit obstructed by furniture, compare readings with a room
-   thermometer before choosing the unobstructed unit.
-4. Save. The group reports that unit's current measurements and still sends
-   commands to both members. Clear the reference field to restore aggregation.
+3. Open the helper options. In **Temperature Settings**, set **Current Temperature
+   Calculation** to **Reference Climate**, then submit to show the climate selector.
+   Choose the unit with the most representative reading.
+4. Repeat independently in **Humidity Settings** if you want a reference for humidity.
+   The temperature and humidity sources can be different units.
+   Compare temperature readings with a room thermometer before choosing a reference.
+5. Save. The group reports the selected measurements and still sends commands to
+   both members. Choose Mean, Median, Minimum or Maximum to restore aggregation.
 
 This option is available without Advanced Mode. If the reference does not report
 humidity, the group cannot report its current humidity. Unavailable measurements
@@ -500,22 +502,25 @@ When everything agrees, it is empty. Two details make it trustworthy:
 | Option | Description |
 |--------|-------------|
 | **Master Entity** | Designate one member as the group's Leader. Enables Master/Lock sync mode, Master-aware window tracking, and centralized temperature/humidity target display. |
-| **Reference Climate (Temperature and Humidity)** | Optional member whose current temperature and humidity the group reports. Available in both Simple and Advanced Mode. Leave empty to keep the existing aggregation. |
 | **HVAC Mode Strategy** | How the group reports its combined mode. See table below. |
 | **Feature Strategy** | Which features the group exposes. See table below. |
 | **Out-of-Bounds Action** | *(Union only)* What to do when a target temperature is outside a member's range. |
 | **Unsupported HVAC Mode Action** | *(Union only)* What to do with members that don't support the requested mode. |
 
-The reference climate is independent of the Master Entity: it supplies measured
-values, while targets, capabilities, and synchronization keep their existing
-settings. Both units continue receiving group commands. The reference is read even
-when off or isolated. A missing reading, or an unavailable reference, reports an
-unknown value rather than silently using another member. If the reference has no
-humidity measurement, the group's current humidity is unknown.
+In **Temperature Settings** and **Humidity Settings**, the current-measurement
+calculation dropdown also offers **Reference Climate**. Select it and submit to
+show a member selector in that section. Temperature and humidity have independent
+selectors and can use different members. Switching back to Mean, Median, Minimum
+or Maximum removes the corresponding reference.
 
-When selected, the reference takes precedence over external temperature/humidity
-sensors and suspends their calibration writes. Group sensors and automations
-reading the group's current measurements also use these reference values.
+References are independent of the Master Entity: targets, capabilities, and
+synchronization keep their existing settings. Both units continue receiving group
+commands. A reference is read even when off or isolated. Missing or unavailable
+readings stay unknown, without substituting another unit. External sensors and
+calibration are bypassed only for the measurement using a reference; the other
+measurement continues to use its configured source. Group sensors and automations
+see those same measured values. Existing shared references migrate to both fields
+on upgrade.
 
 Panasonic Comfort Cloud preset, fan, vertical swing, and horizontal swing values
 use the same icons as the individual Panasonic climate entities in the standard
@@ -980,6 +985,6 @@ python -m venv .venv
 .venv/bin/python -m pytest -q
 ```
 
-The tests cover reference selection and clearing, unavailable or invalid readings,
+The tests cover independent reference selection, migration, unavailable or invalid readings,
 external-sensor precedence, calibration suspension, and unchanged group targets.
 HACS and Hassfest validation run separately in GitHub Actions.

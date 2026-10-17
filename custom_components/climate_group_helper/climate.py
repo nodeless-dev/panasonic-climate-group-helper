@@ -46,6 +46,7 @@ from .const import (
     CONF_GRACE_PERIOD,
     CONF_GROUP_PRESETS,
     CONF_HUMIDITY_CURRENT_AVG,
+    CONF_HUMIDITY_REFERENCE_ENTITY,
     CONF_HUMIDITY_SENSORS,
     CONF_HUMIDITY_TARGET_AVG,
     CONF_HUMIDITY_TARGET_ROUND,
@@ -70,11 +71,11 @@ from .const import (
     CONF_RANGE_TEMPLATE_HUMIDITY_DEACTIVATION_DELAY,
     CONF_RANGE_TEMPLATE_HUMIDITY_ENABLED,
     CONF_RANGE_TEMPLATE_HUMIDITY_HYSTERESIS,
-    CONF_REFERENCE_ENTITY,
     CONF_RETRY_ATTEMPTS,
     CONF_RETRY_DELAY,
     CONF_TEMP_CURRENT_AVG,
     CONF_TEMP_INVERTED_OFFSET_TARGETS,
+    CONF_TEMP_REFERENCE_ENTITY,
     CONF_TEMP_SENSORS,
     CONF_TEMP_TARGET_AVG,
     CONF_TEMP_TARGET_ROUND,
@@ -90,6 +91,7 @@ from .const import (
     DOMAIN,
     AdoptManualChanges,
     AverageOption,
+    CurrentAverageOption,
     FeatureStrategy,
     HvacModeStrategy,
     RangeTemplateDeadbandAction,
@@ -113,6 +115,7 @@ from .override import (
 )
 from .presence import PresenceHandler, PresenceOverrideManager
 from .preset import PresetManager
+from .reference import migrate_reference_options
 from .reset import async_reset_group
 from .schedule import BypassScheduleHandler, MainScheduleHandler, ScheduleHoldManager
 from .service_call import (
@@ -199,9 +202,11 @@ class ClimateGroupHelper(GroupEntity, ClimateEntity, RestoreEntity):
         # Home Assistant
         self.hass = hass
         self.entry: ConfigEntry | None = None
+        config = migrate_reference_options(config)
         self.config = config
         self.climate_entity_ids = entity_ids
-        self.reference_entity_id: str | None = config.get(CONF_REFERENCE_ENTITY)
+        self.temp_reference_entity_id: str | None = config.get(CONF_TEMP_REFERENCE_ENTITY)
+        self.humidity_reference_entity_id: str | None = config.get(CONF_HUMIDITY_REFERENCE_ENTITY)
         self.event: Event | None = None
         self._attr_name = name
         self._attr_unique_id = unique_id
@@ -219,11 +224,13 @@ class ClimateGroupHelper(GroupEntity, ClimateEntity, RestoreEntity):
         self._temp_use_master = _get_adv(CONF_TEMP_USE_MASTER, False)
         self._humidity_use_master = _get_adv(CONF_HUMIDITY_USE_MASTER, False)
         # Temperature calculation options
-        self._temp_current_avg_calc = CALC_TYPES[config.get(CONF_TEMP_CURRENT_AVG, AverageOption.MEAN)]
+        self._temp_current_avg_mode = config.get(CONF_TEMP_CURRENT_AVG, CurrentAverageOption.MEAN)
+        self._temp_current_avg_calc = CALC_TYPES.get(self._temp_current_avg_mode, mean)
         self._temp_target_avg_calc = CALC_TYPES[config.get(CONF_TEMP_TARGET_AVG, AverageOption.MEAN)]
         self._temp_round = config.get(CONF_TEMP_TARGET_ROUND, RoundOption.NONE)
         # Humidity calculation options
-        self._humidity_current_avg_calc = CALC_TYPES[config.get(CONF_HUMIDITY_CURRENT_AVG, AverageOption.MEAN)]
+        self._humidity_current_avg_mode = config.get(CONF_HUMIDITY_CURRENT_AVG, CurrentAverageOption.MEAN)
+        self._humidity_current_avg_calc = CALC_TYPES.get(self._humidity_current_avg_mode, mean)
         self._humidity_target_avg_calc = CALC_TYPES[config.get(CONF_HUMIDITY_TARGET_AVG, AverageOption.MEAN)]
         self._humidity_round = config.get(CONF_HUMIDITY_TARGET_ROUND, RoundOption.NONE)
         # HVAC mode strategy

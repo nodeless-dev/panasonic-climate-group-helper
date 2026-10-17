@@ -39,8 +39,7 @@
               "hvac_mode_strategy": "Stratégie du Mode HVAC",
               "feature_strategy": "Stratégie des fonctionnalités",
               "union_out_of_bounds_action": "Action hors plage",
-              "union_unsupported_hvac_action": "Action pour mode HVAC non pris en charge",
-              "reference_entity": "Clim de référence (température et humidité)"
+              "union_unsupported_hvac_action": "Action pour mode HVAC non pris en charge"
             },
             "data_description": {
               "entities": "Ajouter ou supprimer des appareils. La suppression des appareils arrête leur contrôle par le groupe.",
@@ -48,8 +47,7 @@
               "hvac_mode_strategy": "Stratégie pour calculer l'état du groupe à partir de ses membres (ex. si l'un 'heat' et un autre est 'off').",
               "feature_strategy": "Détermine quelles fonctionnalités (ex. modes prédéfinis, modes ventilateur) sont disponibles sur le groupe lorsque les membres ont des capacités différentes.",
               "union_out_of_bounds_action": "Que faire des appareils qui ne peuvent pas atteindre la température cible. S'applique uniquement si la stratégie de fonctionnalités est définie sur Union.",
-              "union_unsupported_hvac_action": "Que faire avec les membres qui ne prennent pas en charge le mode HVAC cible du groupe (ex. climatisation lors du chauffage). S'applique uniquement si la stratégie de fonctionnalités est Union.",
-              "reference_entity": "Utiliser uniquement la température et l’humidité mesurées par ce membre du groupe, même éteint. Laisser vide pour conserver le calcul habituel. Ce choix est prioritaire sur les capteurs externes et suspend leur calibration. Une mesure absente ou indisponible reste inconnue, sans utiliser une autre clim. Les consignes et la synchronisation restent configurées séparément."
+              "union_unsupported_hvac_action": "Que faire avec les membres qui ne prennent pas en charge le mode HVAC cible du groupe (ex. climatisation lors du chauffage). S'applique uniquement si la stratégie de fonctionnalités est Union."
             }
           },
           "temperature_section": {
@@ -67,13 +65,14 @@
               "temp_inverted_offset_targets": "Cibles d'offset inversé",
               "calibration_heartbeat": "Heartbeat de Calibration (min)",
               "calibration_ignore_off": "Ignorer les membres éteints",
-              "ignore_off_members_temperature": "Exclure les membres éteints de la température"
+              "ignore_off_members_temperature": "Exclure les membres éteints de la température",
+              "temp_reference_entity": "Clim de référence"
             },
             "data_description": {
               "temp_target_avg": "Comment le groupe calcule la consigne cible à envoyer à ses membres.",
               "temp_use_master": "Affiche la consigne de l'entité maître comme température cible du groupe au lieu de la moyenne des membres. Revient à la moyenne si l'entité maître est indisponible. Affecte uniquement l'affichage de l'état du groupe — ne contrôle ni ne synchronise les membres (utilisez Mode de synchronisation : Master/Lock pour cela).",
               "temp_target_round": "S'applique uniquement aux valeurs envoyées aux appareils, pas aux valeurs actuelles/affichées.",
-              "temp_current_avg": "Comment le groupe résume les relevés des capteurs de ses membres.",
+              "temp_current_avg": "Choisir Moyenne, Médiane, Minimum, Maximum ou Clim de référence. Après validation, sélectionner la clim de référence. Ce choix est indépendant pour la température et l’humidité et suspend la calibration uniquement pour cette mesure.",
               "min_temp_off": "Envoie la température minimale de l'appareil (ex: 5°C) lors de l'arrêt du groupe. Cela garantit que les vannes sind complètement fermées pour la protection contre le gel.",
               "temp_sensors": "Utiliser des capteurs externes au lieu des relevés des membres. Ils deviennent la seule source de vérité pour la température du groupe.",
               "temp_update_targets": "Écrire la valeur du capteur externe vers des entités numériques (ex. offsets de calibration TRV). Utile pour garder les thermostats informés de la température réelle de la pièce.",
@@ -81,7 +80,8 @@
               "temp_inverted_offset_targets": "Entités de calibration d'appareils qui fonctionnent à l'envers : un offset plus élevé fait indiquer à l'appareil une température plus basse. Utilisé uniquement en mode Offset.",
               "calibration_heartbeat": "Forcer périodiquement la synchronisation de la calibration vers les entités même si la température n'a pas changé. Régler sur 0 pour désactiver.",
               "calibration_ignore_off": "Ne pas envoyer de mises à jour de calibrage aux membres actuellement éteints.",
-              "ignore_off_members_temperature": "Les membres actuellement éteints seront exclus des calculs de température actuelle et cible."
+              "ignore_off_members_temperature": "Les membres actuellement éteints seront exclus des calculs de température actuelle et cible.",
+              "temp_reference_entity": "Utiliser uniquement la mesure de température de cette clim, même éteinte. Une mesure absente reste inconnue."
             }
           },
           "humidity_section": {
@@ -93,15 +93,17 @@
               "humidity_target_round": "Précision de l'Humidité Cible",
               "humidity_current_avg": "Humidité Actuelle",
               "humidity_sensors": "Capteurs d'Humidité Externes",
-              "humidity_update_targets": "Écrire l'Humidité Externe vers les Entités"
+              "humidity_update_targets": "Écrire l'Humidité Externe vers les Entités",
+              "humidity_reference_entity": "Clim de référence"
             },
             "data_description": {
               "humidity_target_avg": "Comment le groupe calcule la consigne cible à envoyer à ses membres.",
               "humidity_use_master": "Affiche la consigne de l'entité maître comme humidité cible du groupe au lieu de la moyenne des membres. Revient à la moyenne si l'entité maître est indisponible. Affecte uniquement l'affichage de l'état du groupe — ne contrôle ni ne synchronise les membres (utilisez Mode de synchronisation : Master/Lock pour cela).",
               "humidity_target_round": "S'applique uniquement aux valeurs envoyées aux appareils, pas aux valeurs actuelles/affichées.",
-              "humidity_current_avg": "Comment le groupe résume les relevés des capteurs de ses membres.",
+              "humidity_current_avg": "Choisir Moyenne, Médiane, Minimum, Maximum ou Clim de référence. Après validation, sélectionner la clim de référence. Ce choix est indépendant pour la température et l’humidité et suspend la calibration uniquement pour cette mesure.",
               "humidity_sensors": "Utiliser des capteurs externes au lieu des relevés des membres. Ils deviennent la seule source de vérité pour l'humidité du groupe.",
-              "humidity_update_targets": "Écrire la valeur du capteur externe vers des entités numériques. Utile pour l'étalonnage des déshumidificateurs."
+              "humidity_update_targets": "Écrire la valeur du capteur externe vers des entités numériques. Utile pour l'étalonnage des déshumidificateurs.",
+              "humidity_reference_entity": "Utiliser uniquement la mesure de humidité de cette clim, même éteinte. Une mesure absente reste inconnue."
             }
           },
           "sync_section": {
@@ -395,7 +397,8 @@
       "group_presets_invalid": "Format YAML non valide dans les préréglages de groupe. Doit être un mappage clé-valeur valide.",
       "preset_name_collision_notice": "Un ou plusieurs préréglages de groupe partagent le même nom que les préréglages natifs des membres. La définition du groupe les remplacera.",
       "sensor_loop_protection": "Impossible d'utiliser une entité Climate Group Helper comme capteur externe ou cible de calibration — cela créerait une boucle de rétroaction.",
-      "reference_not_in_members": "La clim de référence doit être un membre du groupe."
+      "reference_not_in_members": "La clim de référence doit être un membre du groupe.",
+      "reference_required": "Sélectionnez une clim de référence."
     },
     "abort": {
       "no_changes": "Aucun changement détecté."
@@ -435,7 +438,8 @@
         "mean": "Moyenne",
         "median": "Médiane (Ignorer les valeurs aberrantes)",
         "min": "Minimum (Le plus bas)",
-        "max": "Maximum (Le plus haut)"
+        "max": "Maximum (Le plus haut)",
+        "reference": "Clim de référence"
       }
     },
     "temp_calibration_mode": {
@@ -465,7 +469,8 @@
         "mean": "Moyenne",
         "median": "Médiane (Ignorer les valeurs aberrantes)",
         "min": "Minimum (Le plus bas)",
-        "max": "Maximum (Le plus haut)"
+        "max": "Maximum (Le plus haut)",
+        "reference": "Clim de référence"
       }
     },
     "sync_mode": {

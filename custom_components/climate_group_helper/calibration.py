@@ -23,6 +23,7 @@ from .const import (
     META_KEY_CALIBRATION_MODE,
     META_VALUE_DISABLED,
     CalibrationMode,
+    CurrentAverageOption,
 )
 from .state import is_available
 
@@ -112,13 +113,13 @@ class CalibrationHandler:
 
     @property
     def bypassed(self) -> bool:
-        """Return True when calibration is suspended by a reference or slot.
+        """Return True while a slot suspends calibration writes.
 
         Read at call time rather than captured in __init__, so a slot can
         suspend and resume writes without reloading the handler — the same
         pattern the other meta-keys use for their handler modes.
         """
-        return bool(self._group.reference_entity_id) or (
+        return (
             self._group.run_state.config_overrides.get(META_KEY_CALIBRATION_MODE)
             == META_VALUE_DISABLED
         )
@@ -161,6 +162,14 @@ class CalibrationHandler:
         already-queued value. Writing it anyway is the zigbee wake-up that
         Battery Saver exists to prevent.
         """
+        if (
+            self._group._temp_current_avg_mode == CurrentAverageOption.REFERENCE
+            and target_entity_id in self._group.temp_update_target_entity_ids
+        ) or (
+            self._group._humidity_current_avg_mode == CurrentAverageOption.REFERENCE
+            and target_entity_id in self._group.humidity_update_target_entity_ids
+        ):
+            return "reference measurement selected"
         member_id = self._target_member_map.get(target_entity_id)
         if not member_id:
             return None
@@ -193,6 +202,10 @@ class CalibrationHandler:
         so the values resume from their current readings when the slot ends.
         """
         if self.bypassed:
+            return
+        current_mode = (self._group._temp_current_avg_mode if domain == "temperature"
+                        else self._group._humidity_current_avg_mode)
+        if current_mode == CurrentAverageOption.REFERENCE:
             return
 
         if domain == "temperature":

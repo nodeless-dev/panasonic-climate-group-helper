@@ -80,6 +80,7 @@ from .const import (
     AdoptManualChanges,
     AverageOption,
     CalibrationMode,
+    CurrentAverageOption,
     IsolationActionType,
     IsolationTrigger,
     PresenceAction,
@@ -282,9 +283,9 @@ async def async_apply_config(
     enum_keys: dict[str, type[StrEnum]] = {
         CONF_SYNC_MODE: SyncMode,
         CONF_TEMP_CALIBRATION_MODE: CalibrationMode,
-        CONF_TEMP_CURRENT_AVG: AverageOption,
+        CONF_TEMP_CURRENT_AVG: CurrentAverageOption,
         CONF_TEMP_TARGET_AVG: AverageOption,
-        CONF_HUMIDITY_CURRENT_AVG: AverageOption,
+        CONF_HUMIDITY_CURRENT_AVG: CurrentAverageOption,
         CONF_HUMIDITY_TARGET_AVG: AverageOption,
     }
     # These reach no constructor, but the options flow renders their value as a

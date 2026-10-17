@@ -121,7 +121,7 @@ Some cases don't follow the Sync Mode:
 
 The group entity shows **what the devices do**, not what the group wants:
 
-- **Current temperature and humidity** come only from the selected **Reference Climate**, when configured. Otherwise they come from external sensors, or are calculated from the devices (mean, median, minimum or maximum). Missing reference measurements remain unknown. Selecting a reference suspends external-sensor calibration; group sensors and automations also see the reference measurements.
+- **Current temperature and humidity** come only from the selected **Reference Climate**, when configured. Otherwise they come from external sensors, or are calculated from the devices (mean, median, minimum or maximum). Missing reference measurements remain unknown. Temperature and humidity can have different references. Selecting one suspends external-sensor calibration only for that measurement; group sensors and automations also see the reference measurements.
 - **Target temperature** is calculated the same way from the devices' setpoints, or taken from the master device with **Use Master Target Temperature** (or **Use Master Target Humidity**). With **Correct member offset** (on by default), Member Offsets are taken out first, so a bedroom running a degree cooler doesn't pull the value down.
 - **Mode** is combined from the devices' modes as set by the **HVAC Mode Strategy**.
 

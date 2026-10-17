@@ -47,6 +47,7 @@ from .const import (
     CONF_GRACE_PERIOD,
     CONF_GROUP_PRESETS,
     CONF_HUMIDITY_CURRENT_AVG,
+    CONF_HUMIDITY_REFERENCE_ENTITY,
     CONF_HUMIDITY_SENSORS,
     CONF_HUMIDITY_TARGET_AVG,
     CONF_HUMIDITY_TARGET_ROUND,
@@ -92,7 +93,6 @@ from .const import (
     CONF_RANGE_TEMPLATE_HUMIDITY_DEACTIVATION_DELAY,
     CONF_RANGE_TEMPLATE_HUMIDITY_ENABLED,
     CONF_RANGE_TEMPLATE_HUMIDITY_HYSTERESIS,
-    CONF_REFERENCE_ENTITY,
     CONF_RETAIN_SERVICE_CHANGES_PRESETS,
     CONF_RETAIN_SERVICE_CHANGES_SCHEDULE,
     CONF_RETRY_ATTEMPTS,
@@ -108,6 +108,7 @@ from .const import (
     CONF_TEMP_CALIBRATION_MODE,
     CONF_TEMP_CURRENT_AVG,
     CONF_TEMP_INVERTED_OFFSET_TARGETS,
+    CONF_TEMP_REFERENCE_ENTITY,
     CONF_TEMP_SENSORS,
     CONF_TEMP_TARGET_AVG,
     CONF_TEMP_TARGET_ROUND,
@@ -135,6 +136,7 @@ from .const import (
     AdoptManualChanges,
     AverageOption,
     CalibrationMode,
+    CurrentAverageOption,
     FeatureStrategy,
     HvacModeStrategy,
     IsolationActionType,
@@ -158,7 +160,7 @@ from .state import available_state
 class ClimateGroupHelperConfigFlow(config_entries.ConfigFlow, domain=DOMAIN):
     """Handle a config flow for Climate Group."""
 
-    VERSION = 16
+    VERSION = 17
 
     @staticmethod
     @callback
@@ -223,6 +225,10 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
         self._min_temp: float = DEFAULT_MIN_TEMP
         self._max_temp: float = DEFAULT_MAX_TEMP
         self._refresh_hint_shown = False
+        self._reference_modes = {
+            key: config_entry.options.get(key, CurrentAverageOption.MEAN)
+            for key in (CONF_TEMP_CURRENT_AVG, CONF_HUMIDITY_CURRENT_AVG)
+        }
         self._preset_collision_warning_shown = False
         self._from_adv_mode: bool = bool(
             config_entry.options.get(CONF_ADVANCED_MODE, False)
@@ -322,8 +328,15 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
         """Normalize and clean up options based on dependencies."""
         # Start with current config and overlay flat inputs
         current_config = {**self._config_entry.options, **user_input}
-        if CONF_ENTITIES in user_input and not user_input.get(CONF_REFERENCE_ENTITY):
-            current_config.pop(CONF_REFERENCE_ENTITY, None)
+        for mode_key, entity_key in (
+            (CONF_TEMP_CURRENT_AVG, CONF_TEMP_REFERENCE_ENTITY),
+            (CONF_HUMIDITY_CURRENT_AVG, CONF_HUMIDITY_REFERENCE_ENTITY),
+        ):
+            if mode_key in user_input and (
+                user_input[mode_key] != CurrentAverageOption.REFERENCE
+                or not user_input.get(entity_key)
+            ):
+                current_config.pop(entity_key, None)
         # refresh=True means advanced sections weren't rendered — skip deletion guards.
         advanced_mode = bool(user_input.get(CONF_ADVANCED_MODE)) and not refresh
         # Section rendered? Its own required field is in user_input exactly then.
@@ -625,12 +638,6 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                             )
                         ),
                         **master_fields,
-                        vol.Optional(
-                            CONF_REFERENCE_ENTITY,
-                            description={"suggested_value": config.get(CONF_REFERENCE_ENTITY)},
-                        ): selector.EntitySelector(
-                            selector.EntitySelectorConfig(domain=CLIMATE_DOMAIN)
-                        ),
                         vol.Required(
                             CONF_HVAC_MODE_STRATEGY,
                             default=config.get(
@@ -708,6 +715,24 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
             name = state.attributes.get("friendly_name", entity_id) if state else entity_id
             options.append({"value": entity_id, "label": f"{name} ({entity_id})"})
         return options
+
+    def _reference_fields(
+        self, config: dict[str, Any], mode_key: str, entity_key: str
+    ) -> dict[Any, Any]:
+        """Offer a member selector only for the selected reference calculation."""
+        if config.get(mode_key) != CurrentAverageOption.REFERENCE:
+            return {}
+        return {
+            vol.Required(
+                entity_key,
+                description={"suggested_value": config.get(entity_key)},
+            ): selector.EntitySelector(
+                selector.EntitySelectorConfig(
+                    domain=CLIMATE_DOMAIN,
+                    include_entities=list(config.get(CONF_ENTITIES, [])),
+                )
+            )
+        }
 
     def _section_factory_temperature(self, config: dict[str, Any]) -> dict[str, Any]:
         """Factory for temperature section."""
@@ -824,11 +849,12 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                             ),
                         ): selector.SelectSelector(
                             selector.SelectSelectorConfig(
-                                options=[opt.value for opt in AverageOption],
+                                options=[opt.value for opt in CurrentAverageOption],
                                 mode=selector.SelectSelectorMode.DROPDOWN,
                                 translation_key="temp_current_avg",
                             )
                         ),
+                        **self._reference_fields(config, CONF_TEMP_CURRENT_AVG, CONF_TEMP_REFERENCE_ENTITY),
                         **advanced_fields,
                     }
                 ),
@@ -899,11 +925,12 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                             ),
                         ): selector.SelectSelector(
                             selector.SelectSelectorConfig(
-                                options=[opt.value for opt in AverageOption],
+                                options=[opt.value for opt in CurrentAverageOption],
                                 mode=selector.SelectSelectorMode.DROPDOWN,
                                 translation_key="humidity_current_avg",
                             )
                         ),
+                        **self._reference_fields(config, CONF_HUMIDITY_CURRENT_AVG, CONF_HUMIDITY_REFERENCE_ENTITY),
                         **advanced_fields,
                     }
                 ),
@@ -1915,12 +1942,28 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
                     form_errors={"members_section": "no_entities"},
                 )
 
-            reference_entity = render_config.get(CONF_REFERENCE_ENTITY)
-            if reference_entity and reference_entity not in submitted_entities:
-                return await self._show_main_form(
-                    render_config,
-                    form_errors={"members_section": "reference_not_in_members"},
-                )
+            reference_modes = {
+                key: render_config.get(key, CurrentAverageOption.MEAN)
+                for key in (CONF_TEMP_CURRENT_AVG, CONF_HUMIDITY_CURRENT_AVG)
+            }
+            if reference_modes != self._reference_modes and any(
+                reference_modes[key] == CurrentAverageOption.REFERENCE
+                or self._reference_modes[key] == CurrentAverageOption.REFERENCE
+                for key in reference_modes if reference_modes[key] != self._reference_modes[key]
+            ):
+                return await self._show_main_form(render_config)
+
+            for mode_key, entity_key, section_key in (
+                (CONF_TEMP_CURRENT_AVG, CONF_TEMP_REFERENCE_ENTITY, "temperature_section"),
+                (CONF_HUMIDITY_CURRENT_AVG, CONF_HUMIDITY_REFERENCE_ENTITY, "humidity_section"),
+            ):
+                if render_config.get(mode_key) != CurrentAverageOption.REFERENCE:
+                    continue
+                reference_entity = render_config.get(entity_key)
+                error = ("reference_required" if not reference_entity else
+                         "reference_not_in_members" if reference_entity not in submitted_entities else None)
+                if error:
+                    return await self._show_main_form(render_config, form_errors={section_key: error})
 
             # Validate: master entity must be a member of the group
             new_master = flattened_input.get(CONF_MASTER_ENTITY)
@@ -2175,6 +2218,10 @@ class ClimateGroupHelperOptionsFlow(config_entries.OptionsFlow):
         self, config: dict[str, Any], form_errors: dict[str, str] | None = None
     ) -> ConfigFlowResult:
         """Show the unified configuration form."""
+        self._reference_modes = {
+            key: config.get(key, CurrentAverageOption.MEAN)
+            for key in (CONF_TEMP_CURRENT_AVG, CONF_HUMIDITY_CURRENT_AVG)
+        }
         self._update_dynamic_limits(config)
 
         advanced_mode = config.get(CONF_ADVANCED_MODE, False)
