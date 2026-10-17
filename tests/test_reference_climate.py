@@ -286,3 +286,24 @@ async def test_legacy_config_migrates_before_constructing_group(group):
     assert migrated._temp_current_avg_mode == CurrentAverageOption.REFERENCE
     assert migrated._humidity_current_avg_mode == CurrentAverageOption.REFERENCE
     assert migrated.temp_reference_entity_id == migrated.humidity_reference_entity_id == MEMBERS[0]
+
+
+@pytest.mark.parametrize('language', ['en', 'fr'])
+def test_panasonic_mode_labels_cover_every_control_option(language):
+    source = Path('custom_components/climate_group_helper')
+    document = json.loads((source / 'translations' / f'{language}.json').read_text())
+    attrs = document['entity']['climate']['climate_group_helper']['state_attributes']
+    expected = {
+        'preset_mode': ['none', 'powerful', 'quiet', 'heat_8_15'],
+        'fan_mode': ['auto', 'low', 'lowmid', 'mid', 'highmid', 'high'],
+        'swing_mode': ['auto', 'up', 'upmid', 'mid', 'downmid', 'down', 'swing'],
+        'swing_horizontal_mode': ['auto', 'left', 'leftmid', 'mid', 'rightmid', 'right'],
+    }
+    for attribute, values in expected.items():
+        for value in values:
+            assert attrs[attribute]['state'][value]
+    if language == 'fr':
+        assert attrs['swing_mode']['state']['upmid'] == 'Milieu-haut'
+        assert attrs['swing_horizontal_mode']['state']['mid'] == 'Centre'
+    else:
+        assert document == json.loads((source / 'strings.json').read_text())

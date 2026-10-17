@@ -607,7 +607,42 @@
               "standby": "Veille",
               "economy": "Économie",
               "building_protection": "Protection du bâtiment",
-              "boost": "Boost"
+              "boost": "Boost",
+              "none": "Aucun",
+              "powerful": "Puissant",
+              "quiet": "Silencieux",
+              "heat_8_15": "Chauffage 8–15 °C"
+            }
+          },
+          "fan_mode": {
+            "state": {
+              "auto": "Auto",
+              "low": "Faible",
+              "lowmid": "Moyenne-faible",
+              "mid": "Moyenne",
+              "highmid": "Moyenne-forte",
+              "high": "Forte"
+            }
+          },
+          "swing_mode": {
+            "state": {
+              "auto": "Auto",
+              "up": "Haut",
+              "upmid": "Milieu-haut",
+              "mid": "Milieu",
+              "downmid": "Milieu-bas",
+              "down": "Bas",
+              "swing": "Oscillation"
+            }
+          },
+          "swing_horizontal_mode": {
+            "state": {
+              "auto": "Auto",
+              "left": "Gauche",
+              "leftmid": "Centre-gauche",
+              "mid": "Centre",
+              "rightmid": "Centre-droit",
+              "right": "Droite"
             }
           }
         }

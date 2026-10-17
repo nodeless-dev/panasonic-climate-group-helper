@@ -9,6 +9,7 @@ Earlier project history is preserved in [UPSTREAM_CHANGELOG.md](UPSTREAM_CHANGEL
 - Move Reference Climate into each current-measurement calculation dropdown.
 - Show a member selector only when Reference Climate is selected, independently
   for temperature and humidity. Submit once to reveal a newly selected reference.
+- Translate Panasonic preset, fan, and swing modes in English and French.
 - Migrate the old shared reference to both measurements on upgrade.
 - Keep external sensors and calibration working for the other measurement.
 
