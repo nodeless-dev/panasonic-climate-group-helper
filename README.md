@@ -519,7 +519,9 @@ reading the group's current measurements also use these reference values.
 
 Panasonic Comfort Cloud preset, fan, vertical swing, and horizontal swing values
 use the same icons as the individual Panasonic climate entities in the standard
-Home Assistant climate dialog. Existing icons for other devices are preserved.
+Home Assistant climate dialog. Other preset and fan icon mappings remain available. Panasonic fan and swing modes
+use lowercase values on the group to match Home Assistant icon keys; commands are
+converted back to each native mode name before being sent to the members.
 
 ### HVAC Mode Strategy
 
@@ -915,9 +917,9 @@ Fork releases start at `v1.0.0` and are versioned independently from upstream.
 
 ### Manual
 
-1. Download the source ZIP from the [latest release](https://github.com/nodeless-dev/panasonic-climate-group-helper/releases/latest).
-2. Copy `custom_components/climate_group_helper` into your Home Assistant
-   `custom_components` folder, replacing the existing integration files if installed.
+1. Download `panasonic-climate-group-helper.zip` from the [latest release](https://github.com/nodeless-dev/panasonic-climate-group-helper/releases/latest).
+2. Extract its contents into `custom_components/climate_group_helper` in your Home
+   Assistant configuration folder, replacing existing integration files if installed.
 3. **Restart Home Assistant**.
 
 ## Setup

@@ -162,10 +162,10 @@ def test_panasonic_icons_cover_native_modes_and_preserve_existing_icons():
     attrs = icons['entity']['climate']['climate_group_helper']['state_attributes']
     assert attrs['preset_mode']['state']['quiet'] == 'mdi:leaf'
     assert attrs['preset_mode']['state']['none'] == 'mdi:air-filter'
-    assert attrs['fan_mode']['state']['Mid'] == 'mdi:numeric-3-circle-outline'
-    assert attrs['swing_mode']['state']['UpMid'] == 'mdi:arrow-top-right-thin'
-    assert attrs['swing_horizontal_mode']['state']['Mid'] == 'mdi:arrow-down-thin'
-    assert attrs['swing_mode']['state']['auto'] == 'mdi:arrow-oscillating'
+    assert attrs['fan_mode']['state']['mid'] == 'mdi:numeric-3-circle-outline'
+    assert attrs['swing_mode']['state']['upmid'] == 'mdi:arrow-top-right-thin'
+    assert attrs['swing_horizontal_mode']['state']['mid'] == 'mdi:arrow-down-thin'
+    assert attrs['swing_mode']['state']['auto'] == 'mdi:shuffle'
 
 
 async def test_calibration_heartbeat_cannot_write_reference_measurements(group):
@@ -191,3 +191,38 @@ async def test_options_flow_saves_and_clears_reference(group):
     result = await flow.async_step_init({'members_section': {CONF_ENTITIES: MEMBERS}})
     assert result['type'] == 'create_entry'
     assert CONF_REFERENCE_ENTITY not in result['data']
+
+
+@pytest.mark.parametrize(('attribute', 'native', 'displayed'), [
+    ('fan_mode', 'Mid', 'mid'),
+    ('swing_mode', 'UpMid', 'upmid'),
+    ('swing_horizontal_mode', 'LeftMid', 'leftmid'),
+])
+async def test_icon_keys_display_lowercase_but_commands_keep_native_modes(group, attribute, native, displayed):
+    setattr(group, f'_attr_{attribute}s', ['Auto', native])
+    setattr(group, f'_attr_{attribute}', native)
+    assert getattr(group, attribute) == displayed
+    assert getattr(group, attribute + 's') == ['auto', displayed]
+    group.climate_call_handler.call_debounced = AsyncMock()
+    await getattr(group, f'async_set_{attribute}')(displayed)
+    group.climate_call_handler.call_debounced.assert_awaited_once_with(data={attribute: native})
+    assert getattr(group.shared_target_state, attribute) == native
+
+
+def test_case_collisions_keep_distinct_native_options():
+    from custom_components.climate_group_helper.mode_icons import (
+        display_modes,
+        native_mode,
+    )
+    assert display_modes(['Low', 'low']) == ['Low', 'low']
+    assert native_mode('low', ['Low', 'low']) == 'low'
+    assert display_modes(['Custom vendor mode']) == ['Custom vendor mode']
+
+
+def test_icon_state_keys_follow_home_assistant_schema():
+    import re
+    icons = json.loads(Path('custom_components/climate_group_helper/icons.json').read_text())
+    attrs = icons['entity']['climate']['climate_group_helper']['state_attributes']
+    for attribute in attrs.values():
+        for key in attribute.get('state', {}):
+            assert re.fullmatch(r'[a-z0-9](?:[a-z0-9_-]*[a-z0-9])?', key), key

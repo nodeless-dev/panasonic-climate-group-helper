@@ -104,6 +104,7 @@ from .initialization import (
 from .isolation import MemberIsolationHandler
 from .member_template import MemberTemplateManager
 from .meta_processor import SlotMetaProcessor
+from .mode_icons import display_mode, display_modes, native_mode
 from .override import (
     BoostOverrideManager,
     OverrideHandler,
@@ -680,8 +681,33 @@ class ClimateGroupHelper(GroupEntity, ClimateEntity, RestoreEntity):
         self.climate_state_manager.update(humidity=humidity)
         await self.climate_call_handler.call_debounced(data={ATTR_HUMIDITY: humidity})
 
+    @property
+    def fan_mode(self) -> str | None:
+        return display_mode(self._attr_fan_mode, self._attr_fan_modes)
+
+    @property
+    def fan_modes(self) -> list[str] | None:
+        return display_modes(self._attr_fan_modes)
+
+    @property
+    def swing_mode(self) -> str | None:
+        return display_mode(self._attr_swing_mode, self._attr_swing_modes)
+
+    @property
+    def swing_modes(self) -> list[str] | None:
+        return display_modes(self._attr_swing_modes)
+
+    @property
+    def swing_horizontal_mode(self) -> str | None:
+        return display_mode(self._attr_swing_horizontal_mode, self._attr_swing_horizontal_modes)
+
+    @property
+    def swing_horizontal_modes(self) -> list[str] | None:
+        return display_modes(self._attr_swing_horizontal_modes)
+
     async def async_set_fan_mode(self, fan_mode: str) -> None:
         """Forward the set_fan_mode to all climate in the climate group."""
+        fan_mode = native_mode(fan_mode, self._attr_fan_modes)
         self.climate_state_manager.update(fan_mode=fan_mode)
         await self.climate_call_handler.call_debounced(data={ATTR_FAN_MODE: fan_mode})
 
@@ -694,11 +720,13 @@ class ClimateGroupHelper(GroupEntity, ClimateEntity, RestoreEntity):
 
     async def async_set_swing_mode(self, swing_mode: str) -> None:
         """Forward the set_swing_mode to all climate in the climate group."""
+        swing_mode = native_mode(swing_mode, self._attr_swing_modes)
         self.climate_state_manager.update(swing_mode=swing_mode)
         await self.climate_call_handler.call_debounced(data={ATTR_SWING_MODE: swing_mode})
 
     async def async_set_swing_horizontal_mode(self, swing_horizontal_mode: str) -> None:
         """Set new target horizontal swing operation."""
+        swing_horizontal_mode = native_mode(swing_horizontal_mode, self._attr_swing_horizontal_modes)
         self.climate_state_manager.update(swing_horizontal_mode=swing_horizontal_mode)
         await self.climate_call_handler.call_debounced(data={ATTR_SWING_HORIZONTAL_MODE: swing_horizontal_mode})
 

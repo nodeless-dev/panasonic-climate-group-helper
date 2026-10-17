@@ -15,4 +15,4 @@ Earlier project history is preserved in [UPSTREAM_CHANGELOG.md](UPSTREAM_CHANGEL
 - Retain the Home Assistant integration name, domain, and all existing translations.
 - Provide English repository documentation and remove duplicate German documents and diagrams.
 - Retain upstream features, licensing, and attribution.
-- Add 20 regression tests against Home Assistant 2026.10.2.
+- Add 25 regression tests against Home Assistant 2026.10.2.
