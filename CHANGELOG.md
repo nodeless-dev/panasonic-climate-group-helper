@@ -4,6 +4,11 @@ This fork has its own release numbering, starting at v1.0.0. It is based on
 [Climate Group Helper 1.15.0](https://github.com/bjrnptrsn/climate_group_helper).
 Earlier project history is preserved in [UPSTREAM_CHANGELOG.md](UPSTREAM_CHANGELOG.md).
 
+## 1.0.2 - 2026-11-21
+
+- Fix climate group startup on Home Assistant Core 2026.11.2 by importing
+  `EntityCategory` from its defining module.
+
 ## 1.0.1 - 2026-10-17
 
 - Move Reference Climate into each current-measurement calculation dropdown.
